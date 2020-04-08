@@ -27,3 +27,6 @@ Run with:
                                 ----------------------------------------------------------------------------
 ```
 
+`.env` file includes: 
+`SERVER_ADDRESS=''` -- cloud server address
+

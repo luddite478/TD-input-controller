@@ -1,6 +1,7 @@
 const spawn = require('child_process').spawn
 const path = require('path')
 
+// Run EasyDarwin RTSP server as a child process 
 module.exports = function () {
 
 const proc = spawn(path.join(__dirname, './EasyDarwin/EasyDarwin.exe'))

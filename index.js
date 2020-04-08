@@ -6,9 +6,13 @@ const io = require('socket.io')(http)
 const path = require('path')
 const fs = require('fs')
 const axios = require('axios')
+require('dotenv').config()
 
+// Run EasyDarwin RTSP server as a child process 
 require('./rtsp_restreamer/easydarwin.js')()
+// EasyDarwin log watcher which notifies TD about new streams
 require('./rtsp_restreamer/stream_notificator')(io)
+// Cloud -> EasyDarwin restreaming function which uses ffmpeg in a child process 
 const ffmpegRestream = require('./rtsp_restreamer/ffmpeg_restream.js')
 
 const mediaFolderPath = process.argv[2]
@@ -16,7 +20,8 @@ const mediaFolderPath = process.argv[2]
 const mediaFolder = path.join(mediaFolderPath)
 const downloadFolder = path.join(__dirname, 'tmp')
 
-const BOT_SERVER_LINK = 'ec2-13-53-110-132.eu-north-1.compute.amazonaws.com:8787'
+const SERVER_HTTP_PORT = 8787
+const SERVER_ADDRESS = process.env.SERVER_ADDRESS
 const PORT = 9898
 let isConenctedToTouchdesigner = false
 
@@ -65,7 +70,7 @@ async function handleRequest (request) {
     
         const res = await axios({
             method: 'get',
-            url: `http://${BOT_SERVER_LINK}/download`,
+            url: `http://${SERVER_ADDRESS}:${SERVER_HTTP_PORT}/download`,
             headers: { 
                 'token': token 
             },
@@ -90,7 +95,7 @@ async function handleRequest (request) {
     }
 }
 
-const tgServerBotSocket = require('socket.io-client')(`http://${BOT_SERVER_LINK}`)
+const tgServerBotSocket = require('socket.io-client')(`http://${SERVER_ADDRESS}:${SERVER_HTTP_PORT}`)
 
 tgServerBotSocket.on('connect', () => {
     if (isConenctedToTouchdesigner) {

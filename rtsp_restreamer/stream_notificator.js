@@ -25,6 +25,7 @@ function handleNewLogLine (io, line) {
     
     try {
         const firstWord = line.split(' ')[0]
+        // RTSP protocol RECORD method means that stram started
         if (firstWord === 'RECORD') {
             console.log(line)
             const streamUrl = line.split(' ')[1]
@@ -38,6 +39,7 @@ function handleNewLogLine (io, line) {
 }
 
 function handleNewLogFile (io, logPath) { 
+    // This file appears for a moment when logs are being created
     if (path.extname(logPath) === '.log_lock') {
         return
     }
@@ -57,11 +59,12 @@ function handleWatchDirError (err) {
 
 module.exports = (io) => {
     const logFiles = fs.readdirSync(logPath)
-   
+    // if log file for current date exists choose it for watching
     if (logFiles.length !== 0) {
         setWatcherToLatestLogFile(io, logFiles, logPath)
     }
 
+    // Set watcher for new logs files 
     const watcher = chokidar.watch(logPath, { ignored: /^\./, persistent: true })
     watcher
         .on('add', (path) => handleNewLogFile(io,path))
