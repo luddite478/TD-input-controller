@@ -4,3 +4,4 @@ rtsp_restreamer/ffmpeg/*
 rtsp_restreamer/EasyDarwin/logs/*
 rtsp_restreamer/EasyDarwin/*.db
 tmp/*
+!*.gitkeep
