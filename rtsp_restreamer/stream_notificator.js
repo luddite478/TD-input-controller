@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const chokidar = require('chokidar')
 
-const logPath = path.normalize('./EasyDarwin/logs')
+const logPath = path.resolve('rtsp_restreamer/EasyDarwin/logs')
 
 let tail = null
 function setWatcherToLatestLogFile (io, logFiles, logPath) {

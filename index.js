@@ -28,22 +28,21 @@ let isConenctedToTouchdesigner = false
 io.on('connection', (socket) => {
     isConenctedToTouchdesigner = true
     console.log('Touchdesigner connected')
-    io.emit('downloader_connect', true)
+    io.emit('input_controller_connect', true)
 
     socket.on('disconnect', () => {
         isConenctedToTouchdesigner = false
         console.log('Touchdesigner disconnected')
-        io.emit('downloader_disconnect', true)
+        io.emit('input_controller_disconnect', true)
     })
 })
 
-//
 async function moveFileFromDownloadsFolderToTDQueueFolder (downloadFilePath, mediaFolderFilePath) {
     try {
         fs.renameSync(downloadFilePath, mediaFolderFilePath)
     } catch (error) {
         console.log('Can not move file ', err)
-        io.emit('downloader_error', error)
+        io.emit('input_controller_error', error)
     }
 } 
 
@@ -52,7 +51,7 @@ async function handleRequest (request) {
         
         if (!isConenctedToTouchdesigner) {
             const errMsg = 'Could not download file since connection to Touchdesigner is broken'
-            io.emit('downloader_error', errMsg)
+            io.emit('input_controller_error', errMsg)
             throw new Error(errMsg)
         }
 
@@ -86,12 +85,12 @@ async function handleRequest (request) {
                 })             
         } else {
             const errMsg = `Failed to download file from server, status code: ${res.status}`
-            io.emit('downloader_error', errMsg)
+            io.emit('input_controller_error', errMsg)
             throw new Error(errMsg)
         }
     } catch (error) {
         console.log('Failed to download file from server', error)
-        io.emit('downloader_error', error)
+        io.emit('input_controller_error', error)
     }
 }
 
@@ -112,7 +111,7 @@ tgServerBotSocket.on('audio_request', async (request) => {
     try {
         await handleRequest (request)
     } catch (error){
-        io.emit('downloader_error', error)
+        io.emit('input_controller_error', error)
     }
 })
 
@@ -120,7 +119,7 @@ tgServerBotSocket.on('video_request', async (request) => {
     try {
         await handleRequest (request)
     } catch (error) {
-        io.emit('downloader_error', error)
+        io.emit('input_controller_error', error)
     }
 })
 
@@ -128,7 +127,7 @@ tgServerBotSocket.on('photo_request', async (request) => {
     try {
         await handleRequest (request)
     } catch (error) {
-        io.emit('downloader_error', error)
+        io.emit('input_controller_error', error)
     }
 })
 
@@ -152,7 +151,7 @@ tgServerBotSocket.on('rtsp_broadcast_end',  (msg) => {
 })
 
 http.listen(PORT, () => {
-    console.log(`Downloader is listening on ${PORT}`)
+    console.log(`input_controller is listening on ${PORT}`)
 })
 
 
