@@ -1,0 +1,6 @@
+node_modules
+.env
+rtsp_restreamer/ffmpeg/*
+rtsp_restreamer/EasyDarwin/logs/*
+rtsp_restreamer/EasyDarwin/*.db
+tmp/*
