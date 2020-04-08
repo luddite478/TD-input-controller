@@ -57,8 +57,7 @@ function handleWatchDirError (err) {
 
 module.exports = (io) => {
     const logFiles = fs.readdirSync(logPath)
-    io.emit('ping', true)
-    
+   
     if (logFiles.length !== 0) {
         setWatcherToLatestLogFile(io, logFiles, logPath)
     }
