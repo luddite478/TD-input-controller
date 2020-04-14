@@ -6,4 +6,5 @@ rtsp_restreamer/EasyDarwin/*.db
 videohost_restreamer/streamlink/*
 videohost_restreamer/vlc/*
 tmp/*
+https/*
 !*.gitkeep

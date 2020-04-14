@@ -17,7 +17,7 @@ const ffmpegRestream = require('./rtsp_restreamer/ffmpeg_restream.js')
 // Streamlink restream to NDI 
 const videohostRestream = require('./videohost_restreamer/index.js')
 
-const mediaFolderPath = process.argv[2]
+const mediaFolderPath = process.env.TD_MEDIA_FOLDER
 
 const mediaFolder = path.join(mediaFolderPath)
 const downloadFolder = path.join(__dirname, 'tmp')
@@ -76,7 +76,7 @@ async function handleRequest (request) {
 
         const res = await axios({
             method: 'get',
-            url: `http://${SERVER_ADDRESS}:${SERVER_HTTP_PORT}/download`,
+            url: `https://${SERVER_ADDRESS}:${SERVER_HTTP_PORT}/download`,
             headers: { 
                 'token': token 
             },
@@ -102,13 +102,20 @@ async function handleRequest (request) {
     }
 }
 
-const tgServerBotSocket = require('socket.io-client')(`http://${SERVER_ADDRESS}:${SERVER_HTTP_PORT}`)
+const tgServerBotSocket = require('socket.io-client')(`https://${SERVER_ADDRESS}:${SERVER_HTTP_PORT}`,{ rejectUnauthorized: false })
 
+tgServerBotSocket.on('*', () => {
+    console.log('sdfsdfdsf')
+})
 tgServerBotSocket.on('connect', () => {
     if (isConenctedToTouchdesigner) {
         touchdesingerIO.emit('bot_server_connect', true)
     }
     console.log('Connected to telegram bot server')
+})
+
+tgServerBotSocket.on('connect_failed', function() {
+    console.logs("Sorry, there seems to be an issue with the connection!");
 })
 
 tgServerBotSocket.on('disconnect', () => {
