@@ -3,8 +3,9 @@
 Indludes:
 - Socket-io client for communicating with the server
 - Socket-io server for communicating with Touchdesigner
-- Media downloader
-- Stream Notificator
+- Server media files downloader
+- RTSP restreamer with notificator
+- Videohosting NDI restreamer (streamlink, vlc with NDI plugin)
 
 Run with:
 `node index.js <TD_media_folder_path>`
