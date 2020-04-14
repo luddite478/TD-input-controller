@@ -97,11 +97,13 @@ module.exports = function (touchdesingerIO, streamUrl) {
         streamlink.on('close', () => {
             console.log(`streamlink with pid ${streamlink.pid} closed`)
             touchdesingerIO.emit('videohost_restream_stop', `streamlink with pid ${streamlink.pid} closed`)
+            killPrevChildrenPids(['vlc'])
         })
 
         vlc.on('close', () => {
             console.log(`vlc with pid ${vlc.pid} closed`)
             touchdesingerIO.emit('videohost_restream_stop', `vlc with pid ${vlc.pid} closed`)
+            killPrevChildrenPids(['streamlink'])
         })
 
         console.log(`Videohost restream start, emitting event, url: ${streamUrl}`)
